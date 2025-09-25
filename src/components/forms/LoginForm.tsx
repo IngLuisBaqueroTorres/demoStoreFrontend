@@ -1,5 +1,5 @@
-
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import {
@@ -17,19 +17,24 @@ import {
   CardHeader,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import GoogleLogo from "../icons/GoogleLog";
+import GoogleLogo from "../icons/GoogleLog"; // 👈 revisa que el archivo exista con este nombre
+import { login } from "../../services/authService";
+
+// ✅ Esquema de validación unificado
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email("Correo inválido")
+    .required("Correo requerido"),
+  password: Yup.string().required("Contraseña requerida"),
+  remember: Yup.boolean(),
+});
+
+// ✅ Tipado de las credenciales basado en el schema
+export type LoginCredentials = Yup.InferType<typeof validationSchema>;
 
 const LoginForm = () => {
   const { t } = useTranslation();
-
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email(t("validation.emailInvalid", "Correo inválido"))
-      .required(t("validation.emailRequired", "Correo requerido")),
-    password: Yup.string().required(
-      t("validation.passwordRequired", "Contraseña requerida")
-    ),
-  });
+  const navigate = useNavigate();
 
   return (
     <Grid
@@ -72,11 +77,21 @@ const LoginForm = () => {
           <Formik
             initialValues={{ email: "", password: "", remember: false }}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
+            onSubmit={async (values, { setSubmitting }) => {
+              try {
+                const userData = await login(values);
+                console.log("Login successful:", userData);
+
+                if (userData && userData.token) {
+                  localStorage.setItem("authToken", userData.token);
+                  navigate("/dashboard");
+                }
+              } catch (error) {
+                console.error("Fallo en el login:", error);
+                // 👉 Aquí podrías mostrar un Snackbar o mensaje de error
+              } finally {
                 setSubmitting(false);
-                alert(JSON.stringify(values, null, 2));
-              }, 400);
+              }
             }}
           >
             {({ errors, touched, getFieldProps }) => (
@@ -105,9 +120,11 @@ const LoginForm = () => {
                   error={touched.password && Boolean(errors.password)}
                   helperText={touched.password && errors.password}
                 />
+
                 <Link href="#" variant="body2">
                   ¿Olvidaste tu contraseña?
                 </Link>
+
                 <Box
                   sx={{
                     display: "flex",
@@ -116,12 +133,11 @@ const LoginForm = () => {
                   }}
                 >
                   <FormControlLabel
-                    control={
-                      <Field as={Checkbox} name="remember" color="primary" />
-                    }
+                    control={<Field as={Checkbox} name="remember" color="primary" />}
                     label="Acuérdate de mí"
                   />
                 </Box>
+
                 <Button
                   type="submit"
                   fullWidth
@@ -129,25 +145,27 @@ const LoginForm = () => {
                   sx={{
                     mt: 3,
                     mb: 2,
-                    backgroundColor: "#f5f5f5",
-                    color: "#000000",
+                    backgroundColor: "primary.main",
+                    color: "#fff",
                     "&:hover": {
-                      backgroundColor: "#e0e0e0",
+                      backgroundColor: "primary.dark",
                     },
                   }}
                 >
                   Iniciar sesión
                 </Button>
+
                 <Typography align="center" sx={{ mb: 2 }}>
                   ¿No tienes una cuenta?{" "}
                   <Link href="#" variant="body2">
                     Regístrate
                   </Link>
                 </Typography>
+
                 <Button
                   fullWidth
                   variant="outlined"
-                  startIcon={<GoogleLogo component="svg" />}
+                  startIcon={<GoogleLogo />}
                   sx={{
                     mb: 1,
                     color: "#ffffff",
@@ -158,6 +176,9 @@ const LoginForm = () => {
                     },
                     textTransform: "none",
                     fontWeight: "bold",
+                  }}
+                  onClick={() => {
+                    console.log("TODO: implementar login con Google");
                   }}
                 >
                   Iniciar sesión con Google

@@ -14,11 +14,13 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
+    "axios": "^1.12.2",
     "formik": "^2.4.6",
     "i18next": "^25.5.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-i18next": "^15.7.3",
+    "react-router-dom": "^7.9.2",
     "yup": "^1.7.1"
   },
   "devDependencies": {
