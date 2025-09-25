@@ -1,0 +1,18 @@
+{
+  "login": {
+    "title": "Sign In",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "rememberMe": "Remember me",
+    "submitButton": "Sign In",
+    "googleSignIn": "Sign In with Google",
+    "or": "OR",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account? Sign Up"
+  },
+  "validation": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Enter a valid email",
+    "passwordRequired": "Password is required"
+  }
+}

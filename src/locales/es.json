@@ -1,0 +1,18 @@
+{
+  "login": {
+    "title": "Iniciar Sesión",
+    "emailLabel": "Dirección de Correo Electrónico",
+    "passwordLabel": "Contraseña",
+    "rememberMe": "Recuérdame",
+    "submitButton": "Iniciar Sesión",
+    "googleSignIn": "Iniciar Sesión con Google",
+    "or": "O",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes una cuenta? Regístrate"
+  },
+  "validation": {
+    "emailRequired": "El correo es obligatorio",
+    "emailInvalid": "Ingresa un correo válido",
+    "passwordRequired": "La contraseña es obligatoria"
+  }
+}
