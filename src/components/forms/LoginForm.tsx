@@ -84,7 +84,7 @@ const LoginForm = () => {
                 const userData = await login(values);
                 console.log("Login successful:", userData);
 
-                if (userData && userData.token) {
+                if (userData?.token) {
                   localStorage.setItem("authToken", userData.token);
                   navigate("/dashboard");
                 }
@@ -123,10 +123,6 @@ const LoginForm = () => {
                   helperText={touched.password && errors.password}
                 />
 
-                <Link href="#" variant="body2">
-                  ¿Olvidaste tu contraseña?
-                </Link>
-
                 <Box
                   sx={{
                     display: "flex",
@@ -136,8 +132,12 @@ const LoginForm = () => {
                 >
                   <FormControlLabel
                     control={<Field as={Checkbox} name="remember" color="primary" />}
-                    label="Acuérdate de mí"
+                    label="Recordarme"
+                    sx={{ color: 'text.secondary' }}
                   />
+                  <Link href="#" variant="body2">
+                    ¿Olvidaste tu contraseña?
+                  </Link>
                 </Box>
 
                 <Button
@@ -146,12 +146,7 @@ const LoginForm = () => {
                   variant="contained"
                   sx={{
                     mt: 3,
-                    mb: 2,
-                    backgroundColor: "primary.main",
-                    color: "#fff",
-                    "&:hover": {
-                      backgroundColor: "primary.dark",
-                    },
+                    mb: 2
                   }}
                 >
                   Iniciar sesión
@@ -159,7 +154,7 @@ const LoginForm = () => {
 
                 <Typography align="center" sx={{ mb: 2 }}>
                   ¿No tienes una cuenta?{" "}
-                  <Link href="#" variant="body2">
+                  <Link href="/register" variant="body2">
                     Regístrate
                   </Link>
                 </Typography>
@@ -170,11 +165,9 @@ const LoginForm = () => {
                   startIcon={<GoogleLogo />}
                   sx={{
                     mb: 1,
-                    color: mode === 'light' ? 'black' : 'white',
-                    borderColor: mode === 'light' ? 'black' : 'white',
+                    borderColor: 'grey.500',
                     "&:hover": {
-                      borderColor: mode === 'light' ? 'black' : '#cccccc',
-                      backgroundColor: mode === 'light' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.08)',
+                      borderColor: 'primary.main',
                     },
                     textTransform: "none",
                     fontWeight: "bold",
