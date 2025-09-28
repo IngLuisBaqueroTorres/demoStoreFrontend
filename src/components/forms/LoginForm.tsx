@@ -19,6 +19,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import GoogleLogo from "../icons/GoogleLog"; // 👈 revisa que el archivo exista con este nombre
 import { login } from "../../services/authService";
+import { useTheme } from "../../hooks/useTheme";
 
 // ✅ Esquema de validación unificado
 const validationSchema = Yup.object({
@@ -35,6 +36,7 @@ export type LoginCredentials = Yup.InferType<typeof validationSchema>;
 const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { mode } = useTheme();
 
   return (
     <Grid
@@ -58,7 +60,7 @@ const LoginForm = () => {
           p: 3,
           borderRadius: 3,
           boxShadow: 8,
-          border: "1px solid #444",
+          border: mode === 'light' ? '1px solid #ccc' : '1px solid #444',
         }}
       >
         <CardHeader
@@ -168,11 +170,11 @@ const LoginForm = () => {
                   startIcon={<GoogleLogo />}
                   sx={{
                     mb: 1,
-                    color: "#ffffff",
-                    borderColor: "#ffffff",
+                    color: mode === 'light' ? 'black' : 'white',
+                    borderColor: mode === 'light' ? 'black' : 'white',
                     "&:hover": {
-                      borderColor: "#cccccc",
-                      backgroundColor: "rgba(255,255,255,0.08)",
+                      borderColor: mode === 'light' ? 'black' : '#cccccc',
+                      backgroundColor: mode === 'light' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.08)',
                     },
                     textTransform: "none",
                     fontWeight: "bold",

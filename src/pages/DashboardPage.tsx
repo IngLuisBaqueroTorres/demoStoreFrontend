@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import type { Theme, CSSObject } from '@mui/material/styles';
-import { Box, Typography, Toolbar, List, CssBaseline, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { styled, useTheme as useMuiTheme } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
+import type { CSSObject } from '@mui/system';
+import { Box, Typography, Toolbar, List, CssBaseline, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Grid } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
@@ -11,6 +12,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from '@mui/icons-material/People';
+import SalesChart from '../components/charts/SalesChart'; // Import the new chart component
+import ThemeSwitcher from '../components/ThemeSwitcher';
 
 const drawerWidth = 240;
 
@@ -83,7 +86,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const DashboardPage = () => {
-  const theme = useTheme();
+  const theme = useMuiTheme();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -111,9 +114,10 @@ const DashboardPage = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
+          <ThemeSwitcher />
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -152,12 +156,19 @@ const DashboardPage = () => {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <Typography variant="h4" component="h1" gutterBottom>
-          ¡Bienvenido!
-        </Typography>
-        <Typography paragraph>
-          Has iniciado sesión correctamente. Este es tu panel principal.
-        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h4" component="h1" gutterBottom>
+              ¡Bienvenido!
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              Has iniciado sesión correctamente. Este es tu panel principal.
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <SalesChart />
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

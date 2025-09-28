@@ -8,6 +8,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import BuildIcon from "@mui/icons-material/Build";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import { useTheme } from "../../hooks/useTheme";
 
 interface Feature {
   icon: React.ReactNode;
@@ -47,6 +48,8 @@ const LoginFeatures = ({
     },
   ],
 }: LoginFeaturesProps) => {
+  const { mode } = useTheme();
+
   return (
     <Grid
       item
@@ -55,7 +58,6 @@ const LoginFeatures = ({
       sx={{
         flexBasis: { xs: "100%", md: "50%" },
         maxWidth: { xs: "100%", md: "50%" },
-        color: "white",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -79,7 +81,7 @@ const LoginFeatures = ({
               <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                 {feature.title}
               </Typography>
-              <Typography variant="body2" color="grey.300">
+              <Typography variant="body2" color={mode === 'light' ? 'text.secondary' : 'grey.300'}>
                 {feature.description}
               </Typography>
             </Box>

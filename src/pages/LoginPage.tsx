@@ -1,26 +1,39 @@
 import {
   Grid,
   CssBaseline,
+  Box,
 } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
-import createTheme from "./../theme/theme";
 import LoginForm from "../components/forms/LoginForm";
 import LoginFeatures from "../components/layout/LoginFeatures";
+import ThemeSwitcher from "../components/ThemeSwitcher";
+import { useTheme } from "../hooks/useTheme";
 
 interface LoginPageProps {
   formSide?: "left" | "right";
-  background?: string;
 }
 
 const LoginPage = ({
   formSide = "right",
-  background ="radial-gradient(circle, #1a3836ff 0%, #0a1312ff 90%)",
 }: LoginPageProps) => {
+  const { mode } = useTheme();
+
+  const background = mode === 'light' 
+    ? '#ffffff' 
+    : 'radial-gradient(circle, #1a3836ff 0%, #0a1312ff 90%)';
 
   return (
-    <ThemeProvider theme={createTheme} >
+    <>
       <CssBaseline />
-      <Grid  container sx={{ height: "100vh", width: "100vw", margin: 0, background: background }}>
+      <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 1 }}>
+        <ThemeSwitcher />
+      </Box>
+      <Grid  container sx={{ 
+        height: "100vh", 
+        width: "100vw", 
+        margin: 0, 
+        background: background, 
+        color: mode === 'light' ? 'black' : 'white' 
+      }}>
         {formSide === "left" ? (
           <>
             <LoginForm />
@@ -33,7 +46,7 @@ const LoginPage = ({
           </>
         )}
       </Grid>
-    </ThemeProvider>
+    </>
   );
 };
 
