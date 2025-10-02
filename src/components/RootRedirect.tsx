@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
 const RootRedirect = () => {
-  const rawToken = localStorage.getItem('authToken');
+  const rawToken = sessionStorage.getItem('token');
   const token = rawToken && rawToken !== 'null' && rawToken !== 'undefined' && rawToken.trim() !== '' ? rawToken : null;
 
   if (token) {

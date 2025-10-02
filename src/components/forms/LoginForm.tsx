@@ -85,7 +85,8 @@ const LoginForm = () => {
                 console.log("Login successful:", userData);
 
                 if (userData?.token) {
-                  localStorage.setItem("authToken", userData.token);
+                  // Guardar en sessionStorage para consistencia en la app
+                  sessionStorage.setItem("token", userData.token);
                   navigate("/dashboard");
                 }
               } catch (error) {

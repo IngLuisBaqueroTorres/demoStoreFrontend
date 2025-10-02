@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import OrdersPage from './pages/OrdersPage';
 import NotFoundRedirect from './components/NotFoundRedirect';
 import RootRedirect from './components/RootRedirect';
 import './App.css';
@@ -22,6 +23,7 @@ function App() {
         }
       />
       <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/orders" element={<OrdersPage />} />
       <Route path="*" element={<NotFoundRedirect />} />
     </Routes>
   );
