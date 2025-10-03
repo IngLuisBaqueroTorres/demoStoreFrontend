@@ -7,8 +7,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme as useMuiTheme } from '@mui/material/styles';
-import type { Theme } from '@mui/material/styles';
-import type { CSSObject } from '@mui/system';
+import type { CSSObject, Theme } from '@mui/material/styles';
 import {
   Box,
   Typography,
@@ -340,4 +339,3 @@ export default function DashboardPage() {
     </Box>
   );
 }
-

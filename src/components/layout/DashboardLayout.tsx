@@ -141,11 +141,7 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
 
   const DrawerContent = (
     <>
-      <DrawerHeader>
-        <IconButton onClick={handleDrawerToggle}>
-          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-        </IconButton>
-      </DrawerHeader>
+   
       <Divider />
       <List>
         {menuItems.map((item) => (
