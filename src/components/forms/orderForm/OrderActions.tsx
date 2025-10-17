@@ -1,0 +1,2 @@
+onSave: () => void;
+onCancel: () => void;

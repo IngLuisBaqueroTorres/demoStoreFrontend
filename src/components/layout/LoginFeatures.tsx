@@ -52,20 +52,21 @@ const LoginFeatures = ({
 
   return (
     <Grid
-      item
-      xs={12}
-      md={6}
-      sx={{
-        flexBasis: { xs: "100%", md: "50%" },
-        maxWidth: { xs: "100%", md: "50%" },
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        p: 6,
-      }}
-    >
-      <Box sx={{ maxWidth: 480 }}>
+  item
+  xs={12}
+  md={12}
+  sx={{
+    flexBasis: "100%",
+    maxWidth: "100%",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    p: { xs: 3, md: 6 }, // puedes ajustar después
+  }}
+>
+      <Box sx={{ width: "100%" }}>
         <Typography variant="h4" sx={{ mb: 6, fontWeight: "bold" }}>
           Sitemark
         </Typography>

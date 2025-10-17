@@ -27,52 +27,11 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import EditIcon from "@mui/icons-material/Edit"; // Icono para el botón de editar
 import OrderDetailModal from "./OrderDetailModal"; // Nuevo componente de modal
-import OrderForm from "../components/forms/OrderForm"; // Nuevo componente de formulario
-interface Order {
-  id: string;
-  customerName: string;
-  date: string;
-  total: number;
-  status: "Pending" | "Completed" | "Cancelled";
-  items: OrderItem[];
-  shippingAddress: string;
-}
-
-interface OrderItem {
-  productId: string;
-  productName: string;
-  quantity: number;
-  priceAtPurchase: number;
-}
-
-// Interfaz que coincide con la respuesta de la API
-interface ApiOrder {
-  id: string;
-  customerId: string;
-  customerName: string;
-  orderDate: string;
-  totalAmount: number;
-  status: string; // "PENDING", "COMPLETED", "CANCELLED"
-  shippingAddress: string;
-  billingAddress: string;
-  items: OrderItem[];
-  couponCode: string | null;
-  discountAmount: number;
-  shippingCost: number | null;
-  shippingMethodName: string | null;
-  trackingNumber: string | null;
-  finalAmount: number;
-}
-
-// Interfaz para la respuesta paginada de la API
-interface PaginatedOrdersResponse {
-  content: ApiOrder[];
-  totalElements: number;
-}
+import OrderForm from "../components/forms/orderForm/OrderForm"; // Nuevo componente de formulario
+import type { Order, PaginatedOrdersResponse } from "./types";
 
 // Simulación de datos de órdenes
 const mockOrders: Order[] = []; // Ya no necesitamos mocks complejos si la API funciona
-
 export default function OrdersPage() {
   const [orders, setOrders] = React.useState<Order[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -113,11 +72,13 @@ export default function OrdersPage() {
   };
 
   const getStatusChip = (status: Order["status"]) => {
-    const color = {
+    const statusColors: Record<Order["status"], string> = {
       Completed: green[700],
       Pending: orange[700],
       Cancelled: red[700],
-    }[status];
+      Processing: orange[700], // Añadir color para 'Processing'
+    };
+    const color = statusColors[status];
     return (
       <Chip
         label={status}
@@ -274,18 +235,33 @@ export default function OrdersPage() {
 
       const apiData: PaginatedOrdersResponse = await response.json();
 
-      // Mapear los datos de la API al formato de la tabla
-      const fetchedOrders: Order[] = (apiData.content || []).map((order) => ({
-        id: order.id,
-        customerName: order.customerName,
-        date: new Date(order.orderDate).toLocaleDateString("es-ES"), // Formatear fecha
-        total: order.finalAmount,
-        // Capitalizar el estado: "PENDING" -> "Pending"
-        status: (order.status.charAt(0).toUpperCase() +
-          order.status.slice(1).toLowerCase()) as Order["status"],
-        items: order.items,
-        shippingAddress: order.shippingAddress,
-      }));
+      // Mapear los datos de la API al formato del frontend
+      const fetchedOrders: Order[] = (apiData.content || []).map((order) => {
+        // Separar la dirección en país, ciudad y dirección
+        const addressParts = (order.shippingAddress || '').split(',').map(s => s.trim());
+        const country = addressParts.length > 0 ? addressParts[0] : '';
+        const city = addressParts.length > 1 ? addressParts[1] : '';
+        const addressLine = addressParts.length > 2 ? addressParts.slice(2).join(', ') : '';
+
+        return {
+          id: order.id,
+          customerName: order.customerName,
+          date: new Date(order.orderDate).toLocaleDateString("es-ES"),
+          total: order.finalAmount,
+          status: (order.status.charAt(0).toUpperCase() +
+            order.status.slice(1).toLowerCase()) as Order["status"],
+          items: order.items,
+          shippingAddress: order.shippingAddress,
+          country,
+          city,
+          addressLine,
+          // Pasar datos adicionales
+          customerId: order.customerId,
+          billingAddress: order.billingAddress,
+          trackingNumber: order.trackingNumber,
+          shippingCost: order.shippingCost,
+        };
+      });
 
       setOrders(fetchedOrders);
       setTotalOrders(apiData.totalElements);

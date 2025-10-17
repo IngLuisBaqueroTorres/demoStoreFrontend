@@ -10,22 +10,20 @@ import {
   Checkbox,
   Link,
   Box,
-  Grid,
   Typography,
   Card,
   CardContent,
   CardHeader,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import GoogleLogo from "../icons/GoogleLog"; // 👈 revisa que el archivo exista con este nombre
+import Grid from "@mui/material/Grid"; // ✅ Importación estable de Grid v2
+import GoogleLogo from "../icons/GoogleLog"; // 👈 revisa que el archivo exista
 import { login } from "../../services/authService";
 import { useTheme } from "../../hooks/useTheme";
 
 // ✅ Esquema de validación unificado
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email("Correo inválido")
-    .required("Correo requerido"),
+  email: Yup.string().email("Correo inválido").required("Correo requerido"),
   password: Yup.string().required("Contraseña requerida"),
   remember: Yup.boolean(),
 });
@@ -38,44 +36,45 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { mode } = useTheme();
 
-  return (
-    <Grid
-      item
-      xs={12}
-      md={6}
+  return ( // Restaurado el Box contenedor
+    <Box
       sx={{
-        flexBasis: { xs: "100%", md: "50%" },
-        maxWidth: { xs: "100%", md: "50%" },
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        p: 3,
+        my: 8,
+        mx: 4,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
     >
       <Card
-        sx={{
-          backgroundColor: "transparent",
-          width: "100%",
+        sx={{ // Añadido padding y maxWidth para un mejor aspecto
+          p: 4,
           maxWidth: 400,
-          p: 3,
+          backgroundColor: 'transparent',
           borderRadius: 3,
           boxShadow: 8,
           border: mode === 'light' ? '1px solid #ccc' : '1px solid #444',
         }}
-      >
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-          }
-          title={
-            <Typography component="h1" variant="h6">
-              {t("login.title", "Iniciar sesión")}
-            </Typography>
-          }
-        />
-        <CardContent>
+      > <CardHeader
+            avatar={
+              <Avatar sx={{ bgcolor: "secondary.main", m: 1 }}>
+                <LockOutlinedIcon />
+              </Avatar>
+            }
+            title={
+              <Typography component="h1" variant="h5">
+                {t("login.title", "Iniciar sesión")}
+              </Typography>
+            }
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              p: 0,
+              mb: 1
+            }}
+          />
           <Formik
             initialValues={{ email: "", password: "", remember: false }}
             validationSchema={validationSchema}
@@ -85,7 +84,6 @@ const LoginForm = () => {
                 console.log("Login successful:", userData);
 
                 if (userData?.token) {
-                  // Guardar en sessionStorage para consistencia en la app
                   sessionStorage.setItem("token", userData.token);
                   navigate("/dashboard");
                 }
@@ -98,7 +96,7 @@ const LoginForm = () => {
             }}
           >
             {({ errors, touched, getFieldProps }) => (
-              <Form noValidate>
+              <Form noValidate style={{ width: '100%' }}>
                 <TextField
                   margin="normal"
                   required
@@ -134,7 +132,7 @@ const LoginForm = () => {
                   <FormControlLabel
                     control={<Field as={Checkbox} name="remember" color="primary" />}
                     label="Recordarme"
-                    sx={{ color: 'text.secondary' }}
+                    sx={{ color: "text.secondary" }}
                   />
                   <Link href="#" variant="body2">
                     ¿Olvidaste tu contraseña?
@@ -145,10 +143,7 @@ const LoginForm = () => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{
-                    mt: 3,
-                    mb: 2
-                  }}
+                  sx={{ mt: 3, mb: 2 }}
                 >
                   Iniciar sesión
                 </Button>
@@ -166,9 +161,9 @@ const LoginForm = () => {
                   startIcon={<GoogleLogo />}
                   sx={{
                     mb: 1,
-                    borderColor: 'grey.500',
+                    borderColor: "grey.500",
                     "&:hover": {
-                      borderColor: 'primary.main',
+                      borderColor: "primary.main",
                     },
                     textTransform: "none",
                     fontWeight: "bold",
@@ -182,9 +177,8 @@ const LoginForm = () => {
               </Form>
             )}
           </Formik>
-        </CardContent>
       </Card>
-    </Grid>
+    </Box>
   );
 };
 
